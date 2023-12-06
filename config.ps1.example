@@ -1,0 +1,21 @@
+# instructions: rename this file to "config.ps1" and fill the <FIXME> values below
+
+
+# create one Entra account per role to test and store their credentials here
+$credentials = @{
+    "globalAdmin"                   = @{login = "globalAdmin@<FIXME>.onmicrosoft.com"; password = "<FIXME>" };
+    "securityAdmin"                 = @{login = "securityAdmin@<FIXME>.onmicrosoft.com"; password = "<FIXME>" };
+    "hybridIdentityAdmin"           = @{login = "hybridIdentityAdmin@<FIXME>.onmicrosoft.com"; password = "<FIXME>" };
+    "externalIdentityProviderAdmin" = @{login = "externalIdentityProviderAdmin@<FIXME>.onmicrosoft.com"; password = "<FIXME>" };
+    "domainNameAdmin"               = @{login = "domainNameAdmin@<FIXME>.onmicrosoft.com"; password = "<FIXME>" };
+    "partnerTier1Support"           = @{login = "partnerTier1Support@<FIXME>.onmicrosoft.com"; password = "<FIXME>" };
+    "partnerTier2Support"           = @{login = "partnerTier2Support@<FIXME>.onmicrosoft.com"; password = "<FIXME>" };
+}
+
+# suffix for the custom domains that will be created or converted to federated
+$custom_domain_suffix = "<FIXME>.example.net"
+
+# example self-signed certificate, auto-generated
+$benign_cert = "MIIDHjCCAgagAwIBAgIQWLTjfGLy/IFFgZJlgjz0ZjANBgkqhkiG9w0BAQsFADAWMRQwEgYDVQQDDAtleGFtcGxlLm5ldDAeFw0yMzExMTMxMTIwMDBaFw0yNDExMTMxMTQwMDBaMBYxFDASBgNVBAMMC2V4YW1wbGUubmV0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArtrt9KQZXKnLtNlfe3xrXuKK3EWwPRfv16Y1n8e9M3w7/pt0sdemHWBwSza7TnCE2PxPMg5bicwgQpHmJ9p/QzCTg/S1azi4E8kLW11ncvwbjAoQimy5bCnu/qXxYZbTGzRJhTucOxIOI60K0JzmCnYguI3EjSsYiGQ+yyhTWVe6ij1HkawTt+RsvgbOl0MkOgslGu7UAgglBSqqlC7VD1sNuH8LyaUsJkrEPDL4oN0aNBu6bMgbLQD6hbApzX9bwt1P/vHn4hEOG9sxfc77XrvujPQpHj5JybK5joy42RTCx1u/VFs7tpRtgu2XwiPimdQHfVy4yjnJtn/oq5796QIDAQABo2gwZjAOBgNVHQ8BAf8EBAMCBaAwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMBMBYGA1UdEQQPMA2CC2V4YW1wbGUubmV0MB0GA1UdDgQWBBR+0ZOV+RwQbJrTGl8SBEWNyKcxXTANBgkqhkiG9w0BAQsFAAOCAQEAYYNppaGfzEh0zj6y/2D6CEg6a3ntTIRfvdmEC32wyXmCqcunyPcbtaRPwEZ7E6kI4iHy9ZBqqD3jeGkJ3N7QRLmP5nRt4JXKc9YePPWp6tgLkOQcxyYoM8Vgjysp5iTeTuFQVkZxp2xnLMWsRB6LkZMpmwhBHNS1JqdJLRLiPPd2ejuHDifVOSNBdz014ybVPqnZ+N9Z1SLCwkLB/z0vCHpJI0aQqpcpfgiNk9RXINdOjCBVecsrP3soRrfhgVFaBNxn0VMBnL6N4Ws0q/ymCiO6EnovTVzi8i1gvl/ZHpwOri+L2zuWabHoJGahBKCXFZOOXYA77s3LAV879SY4cA=="
+# example self-signed certificate, considered "malicious" since it's used by AADInternals https://github.com/Gerenios/AADInternals/blob/1e4cf7f3be2441c3e46000cbb50004378bf18fd4/FederatedIdentityTools.ps1#L2 when injecting a federation backdoor
+$malicious_cert = "MIIDcTCCAligAwIBAgIBADANBgkqhkiG9w0BAQ0FADBSMQswCQYDVQQGEwJmaTESMBAGA1UECAwJUGlya2FubWFhMREwDwYDVQQKDAhHZXJlbmlvczEcMBoGA1UEAwwTaGFjay5vMzY1ZG9tYWluLm9yZzAeFw0xODAyMjExMzEyNDVaFw0yODAyMTkxMzEyNDVaMFIxCzAJBgNVBAYTAmZpMRIwEAYDVQQIDAlQaXJrYW5tYWExETAPBgNVBAoMCEdlcmVuaW9zMRwwGgYDVQQDDBNoYWNrLm8zNjVkb21haW4ub3JnMIIBIzANBgkqhkiG9w0BAQEFAAOCARAAMIIBCwKCAQIApH73Hcv30uHHve6Zd3E/aEeFgQRMZD/CJUQC2DfSk0mDX8X75MIo7gP+62ZTUsOxhSDdOOVYshK8Kyk9VZvo21A5hDcCudXxc/eifCdwGLalCaOQt8pdMlYJgsBDcieMNToCx2pXp1PvkJdKc2JiXQCIAolJySbNXGJbBG1Oh4tty7lEXUqHpHgqiIJCb64q64BIQpZr/WQG0QgtH/gwWYz7b/psNA4xVi8RJnRUl7I62+j0WVSTih2j3kK20j5OIW9Rk+5XoHJ5npOBM84pYJ6yxMz1sOdSqOccAjSVHWFKdM437PxAPeiXAXoBKczGZ72Q8ocz2YSLGKcSMnYCrhECAwEAAaNQME4wHQYDVR0OBBYEFNu32o5XSIQ0lvwB+d2cnTlrtk2PMB8GA1UdIwQYMBaAFNu32o5XSIQ0lvwB+d2cnTlrtk2PMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQENBQADggECAHokwTra0dlyG5jj08TiHlx1pJFnqlejjpFXaItuk2jEBfO/fv1AJaETSR5vupFfDHA337oPiqWugxai1TIvJGKhZImNloMj8lyeZk/9/5Pt2X4N8r1JpAQzt+Ez3z7aNrAFxRjJ0Y+rDDcSItZ5vaXJ5PqBvR7icjIBaXrHVFUC6OZ2RkebbpajbIdt6U/P7ovg7L1J6LAzL/asATZzM3Mjn+9rsC9xLbJwuEabLU+BxySsNo8TULYi9O2MSJ9FvddE6n3OPqrmldldCrb6OugK/pzCwjTnVgRtrHNJc+zKavbiu0Yfp8uYhvCCWAakdQ8g6ZNJ1TGSaYNIrpTIhXIJ"
