@@ -19,4 +19,4 @@ Then you can use each script depending on the scenario you want to reproduce.
 
 This work is provided as-is. Tenable forbids using it outside of security research, in particular, **customers must NOT use these to configure their Entra ID**
 
-Licensed under the GNU GPLv3
+Licensed under the [GNU GPLv3](/LICENSE)
