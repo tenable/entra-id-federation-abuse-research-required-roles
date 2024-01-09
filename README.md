@@ -2,7 +2,7 @@
 
 These scripts were used to launch tests and observe results for studying the roles allowing to abuse Entra ID federation for persistence and privilege escalation.
 
-Results are available in the blogpost: FIXME
+Results are available in the blogpost: [Roles allowing to abuse Entra ID federation for persistence and privilege escalation](https://medium.com/tenable-techblog/roles-allowing-to-abuse-entra-id-federation-for-persistence-and-privilege-escalation-df9ca6e58360)
 
 ## How to use
 
